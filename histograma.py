@@ -18,6 +18,7 @@ class Histograma(Imagen):
         self._hist = cv2.calcHist([self._imagen], [0], None, [256], [0, 256])
         fig, ax = plt.subplots(2)
 
+        #print(f"Histograma -> {self._hist}")
         ax[0].imshow(self._imagen, cmap="gray")
         ax[0].set_title("Imagen")
         ax[0].axis("off")

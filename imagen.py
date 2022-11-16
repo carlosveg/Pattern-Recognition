@@ -1,4 +1,5 @@
 import cv2
+import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.image as img
 
@@ -64,3 +65,19 @@ class Imagen():
     def valor_pixel(self, x, y):
         # Devolvemos el valor rgb de en formato [r,g,b] del pixel[x,y]
         return self._imagen[y, x]
+
+    def matriz_covarianza(self):
+        """
+            aquí debemos tener previamente almacenadas los patrones que pertenecen a cada clase
+            para poder tener el valor de n (cuántos elementos tiene la clase) que en un principio
+            cada clase va a comenzar con 5 patrones
+        """
+        c1 = [
+            [200, 160, 120],
+            [210, 170, 130],
+            [215, 172, 133],
+            [210, 165, 134],
+            [198, 177, 138]
+        ]
+
+        return np.cov(c1.T)
