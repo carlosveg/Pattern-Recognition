@@ -66,7 +66,7 @@ class Imagen():
         # Devolvemos el valor rgb de en formato [r,g,b] del pixel[x,y]
         return self._imagen[y, x]
 
-    def matriz_covarianza(self):
+    def matriz_covarianza(self, clase -> int[]) -> int[]:
         """
             aquí debemos tener previamente almacenadas los patrones que pertenecen a cada clase
             para poder tener el valor de n (cuántos elementos tiene la clase) que en un principio
