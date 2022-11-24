@@ -1,7 +1,5 @@
 import cv2
 import numpy as np
-import matplotlib.pyplot as plt
-import matplotlib.image as img
 
 # clasificador_move imprime la clase del pixel en el que se encuentrea el mouse
 # con tan solo moverlo, o hacer clic
