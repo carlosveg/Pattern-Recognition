@@ -1,18 +1,25 @@
 import cv2
 import numpy as np
 from matplotlib import pyplot as plt
+from typing import List
 
 
 class Clasificador():
-    __class = None
+    __files = []
+    __clases = []
 
-    def __init__(self) -> None:
-        pass
+    def __init__(self, clases: List[List[int]]) -> None:
+        for clase in clases:
+            filename = f"dataClass{clases.index(clase) + 1}.txt"
+            self.__files.append(filename)
+            np.savetxt(filename, np.array(clases[0]))
 
-    def fase_entrenamiento(self):
-        pass
+    def fase_entrenamiento(self) -> None:
+        for file in self.__files:
+            data = np.loadtxt(file)
+            self.__clases.append(data)
 
-    def media(clase):
+    def media(self, clase: List[int]) -> List[int]:
         media = [0, 0, 0]
 
         for i in clase:
@@ -24,29 +31,19 @@ class Clasificador():
 
         return media
 
-    def matriz_covarianza(self) -> np.array:
-        """
-            aquí debemos tener previamente almacenadas los patrones que pertenecen a cada clase
-            para poder tener el valor de n (cuántos elementos tiene la clase) que en un principio
-            cada clase va a comenzar con 5 patrones
-        """
-        c1 = [
-            [200, 210, 215, 210, 198],
-            [160, 170, 172, 165, 177],
-            [120, 130, 133, 134, 138],
-        ]
-
-        c1 = np.array(c1)
-
+    def matriz_covarianza(self, calse: List[List[int]]) -> np.array:
+        clase = np.array(clase)
         # para matriz inversa print(np.linalg.inv(A))
+        return np.cov(clase.T)
 
-        return np.cov(c1.T)
+    """
+        Verdes: 20 -> 110
+        Suelo: 110 -> 170
+        Cielo: 170 -> 240
+    """
 
-    def umbralizacion(self, canales: list) -> None:
+    def umbralizacion(self, canales: List[int]) -> None:
         [b, g, r] = canales
-        #cv2.imshow("Canal azul", b)
-        #cv2.imshow("Canal verde", g)
-        #cv2.imshow("Canal rojo", r)
 
         _, ax = plt.subplots(2, 2)
 
@@ -65,5 +62,18 @@ class Clasificador():
         ax[1, 0].imshow(newR, cmap="gray")
         plt.show()
 
-    def mahalanobis(self):
-        pass
+    def mahalanobis(self, patron: List[int], clases: List[List[int]]) -> int:
+        distancias = []
+
+        for clase in clases:
+            clase = np.array(clase)
+            media = self.media(clase)
+            covarianza = np.cov(clase.T)
+            diferencia = np.subtract(patron, media)
+            distancia = diferencia @ np.linalg.inv(covarianza) @ diferencia.T
+            distancias.append(distancia)
+
+        print(distancias)
+        distancia_minima = distancias.index(min(distancias))
+        print(
+            f"El patron { patron } pertenece a la clase { distancia_minima + 1 }")

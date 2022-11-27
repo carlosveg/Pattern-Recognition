@@ -1,4 +1,7 @@
+import os
 import numpy as np
+from typing import List
+from clases import *
 
 c1_2 = [
     [200, 160, 120],
@@ -9,7 +12,7 @@ c1_2 = [
 ]
 
 
-def media(clase):
+def media(clase: List[int]) -> List[int]:
     media = [0, 0, 0]
 
     for i in clase:
@@ -22,12 +25,51 @@ def media(clase):
     return media
 
 
-patron = [37, 150, 190]
+def mahalanobis(patron: List[int], clases: List[List[int]]):
+    distancias = []
+    for clase in clases:
+        clase = np.array(clase)
+        media2 = media(clase)
+        covarianza = np.cov(clase.T)
+        diferencia = np.subtract(patron, media2)
+        distancia = diferencia @ np.linalg.inv(covarianza) @ diferencia.T
+        distancias.append(distancia)
+
+    print(distancias)
+    distancia_minima = distancias.index(min(distancias))
+    print(
+        f"El patron { patron } pertenece a la clase { distancia_minima + 1 }")
+
+
+def init(clases):
+    files = []
+    for clase in clases:
+        filename = f"dataClass{clases.index(clase) + 1}.txt"
+        files.append(filename)
+        np.savetxt(filename, clase)
+
+    for file in files:
+        data = np.loadtxt(file)
+        print(f"Datos de clase {file} -> {data}")
+    # print(files)
+
+
+patron = [236, 231, 228]
+patron2 = [4, 58, 44]
+patron3 = [173, 212, 237]
 c1_2 = np.array(c1_2)
-valor_media = media(c1_2)
-covarianza = np.cov(c1_2.T)
-media = np.transpose(valor_media)[np.newaxis]
-final = np.subtract(patron, media)
-print(covarianza, final)
-distancia = final @ np.linalg.inv(covarianza) @ final.T
-print(distancia)
+clases = [c1, c2, c3]
+#mahalanobis(patron3, clases)
+
+# init(clases)
+
+
+def getFiles():
+    contentPath = os.listdir(os.getcwd())
+    print(contentPath)
+    #filesTXT = [file if ".txt" in file else "" for file in contentPath]
+    filesTXT = [file for file in contentPath if ".txt" in file]
+    print(filesTXT)
+
+
+getFiles()

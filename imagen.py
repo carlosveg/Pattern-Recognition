@@ -1,5 +1,7 @@
 import cv2
 import numpy as np
+from clases import c1, c2, c3
+from clasificador import Clasificador
 
 # clasificador_move imprime la clase del pixel en el que se encuentrea el mouse
 # con tan solo moverlo, o hacer clic
@@ -17,6 +19,8 @@ def clasificador_clic(event, x, y, flags, param):
     # Favor de insertar clasificador
     if (event == 1):
         print(f"{x},{y}: {param[y,x]}")
+        clasificador = Clasificador([c1, c2, c3])
+        clasificador.mahalanobis(param[y, x], [c1, c2, c3])
 
 
 class Imagen():
@@ -48,11 +52,11 @@ class Imagen():
 
     def clasificar_clic(self):
         cv2.namedWindow("imagen")
-
         cv2.setMouseCallback("imagen", clasificador_clic, param=self._imagen)
+
         while True:
             cv2.imshow("imagen", self._imagen)
-            # Para salir del bucle presionar la tecla Esc la cula tiene el valor ASCII = 27
+            # Para salir del bucle presionar la tecla Esc la cual tiene el valor ASCII = 27
             # de lo contrario la ventana se seguira abriendo sin fin
             k = cv2.waitKey(1) & 0xFF
             if k == 27:
