@@ -1,3 +1,4 @@
+import random
 import os
 import numpy as np
 from typing import List
@@ -72,4 +73,5 @@ def getFiles():
     print(filesTXT)
 
 
-getFiles()
+for i in range(10):
+    print(random.uniform(0, 1))

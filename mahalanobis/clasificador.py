@@ -31,7 +31,7 @@ class Clasificador():
 
         return media
 
-    def mahalanobis(self, patron: List[int]) -> None:
+    def classify(self, patron: List[int]) -> None:
         distancias = []
 
         for clase in self.__clases:

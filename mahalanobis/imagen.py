@@ -29,12 +29,13 @@ class Imagen():
 
     def clasificador_clic(self, event, x, y, flags, param):
         if (event == 1):
-            print(f"{x},{y}: {param[y,x]}")
-            self.__clasificador.mahalanobis(param[y, x])
+            print(f"{x},{y}: {param[y,x][::-1]}")
+            self.__clasificador.classify([param[y, x]])
 
     def valor_pixel(self, x, y):
         # Devolvemos el valor rgb de en formato [r,g,b] del pixel[x,y]
-        return self._imagen[y, x]
+        # print(f"Valores RGB: {self._imagen[y, x][::-1]}")
+        return self._imagen[y, x][::-1]
 
     def obtener_canales(self):
         return cv2.split(self._imagen)
