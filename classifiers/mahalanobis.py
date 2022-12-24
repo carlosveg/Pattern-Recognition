@@ -8,7 +8,7 @@ class Clasificador():
 
     def __init__(self, clases: List[List[int]]) -> None:
         for clase in clases:
-            filename = f"dataClass{clases.index(clase) + 1}.txt"
+            filename = f"assets/dataClass{clases.index(clase) + 1}.txt"
             self.__files.append(filename)
             np.savetxt(filename, np.array(clase))
 
@@ -42,7 +42,6 @@ class Clasificador():
             distancia = diferencia @ np.linalg.inv(covarianza) @ diferencia.T
             distancias.append(distancia)
 
-        print(distancias)
         distancia_minima = distancias.index(min(distancias))
         print(
-            f"El patron { patron } pertenece a la clase { distancia_minima + 1 }")
+            f"El patron { patron[0][::-1] } pertenece a la clase { distancia_minima + 1 }")

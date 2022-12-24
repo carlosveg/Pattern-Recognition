@@ -1,6 +1,6 @@
 token.txt
 
 __pycache__/
-
-mahalanobis/__pycache__/
+assets/__pycache__
+classifiers/__pycache__/
 KNN/__pycache__

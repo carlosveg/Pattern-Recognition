@@ -35,21 +35,21 @@ def writeInCsv(filename: str, headers: List[str], data: List) -> None:
         writer.writerows(data)
 
 
-def adapterTrainingData(filename: str) -> List[List[int]]:
+def adapterTrainingData(filename: str) -> List[List]:
     fullData = pd.read_csv(filename)
     patterns = fullData[['b', 'g', 'r']]
     classes = fullData["clase"]
 
-    return [patterns, classes]
+    return patterns, classes
 
 
 def doAll() -> List[List]:
     images = getImages(
-        ["../image/cielo.png", "../image/boscosa.png", "../image/suelo.png"])
+        ["assets/image/cielo.png", "assets/image/boscosa.png", "assets/image/suelo.png"])
     training_data = getTrainingData(
-        images, cv2.imread("../image/3-regiones.png"))
+        images, cv2.imread("assets/image/3-regiones.png"))
     # clase1 = [data for data in training_data if data[2] == 1]
-    filename = 'data.csv'
+    filename = 'assets/data.csv'
 
     writeInCsv(filename, ['b', 'g', 'r', "clase"], training_data)
     data_adapted = adapterTrainingData(filename)

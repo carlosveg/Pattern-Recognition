@@ -18,8 +18,7 @@ class KNNClassifier():
 
     def estadistics(self, patterns_unknow: List[List], patterns: List[List]) -> None:
         predicts = self.__classifier.predict(patterns_unknow)
-        # print(predicts)
         matriz = confusion_matrix(predicts, patterns)
-        print(f"Matriz de confusion: \n{matriz}")
+        print(f"Matriz de confusion: \n{ matriz }")
         precision = precision_score(predicts, patterns, average="macro")
-        print(f"Precision score: \n{precision}")
+        print(f"Precision score: \n{ precision * 100 }%")
