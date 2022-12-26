@@ -43,13 +43,11 @@ def adapterTrainingData(filename: str) -> List[List]:
     return patterns, classes
 
 
-def doAll() -> List[List]:
+def doAll(filename: str) -> List[List]:
     images = getImages(
         ["assets/image/cielo.png", "assets/image/boscosa.png", "assets/image/suelo.png"])
     training_data = getTrainingData(
         images, cv2.imread("assets/image/3-regiones.png"))
-    # clase1 = [data for data in training_data if data[2] == 1]
-    filename = 'assets/data.csv'
 
     writeInCsv(filename, ['b', 'g', 'r', "clase"], training_data)
     data_adapted = adapterTrainingData(filename)

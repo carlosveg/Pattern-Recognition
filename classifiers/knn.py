@@ -4,8 +4,6 @@ from sklearn.metrics import confusion_matrix, precision_score
 
 
 class KNNClassifier():
-    __classifier = None
-
     def __init__(self, k=1) -> None:
         self.__classifier = KNeighborsClassifier(n_neighbors=k)
 
