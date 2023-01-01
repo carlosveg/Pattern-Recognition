@@ -1,3 +1,4 @@
+import random
 from tkinter import *
 from tkinter.ttk import *
 from tkinter import ttk, filedialog, messagebox
@@ -18,7 +19,7 @@ def select_image():
         image = imutils.resize(image, height=380)
 
         imageToShow = imutils.resize(image, width=180)
-        imageToShow = cv2.cvtColor(imageToShow, cv2.COLOR_BGR2RGB)
+        imageToShow = cv2.cvtColor(imageToShow, cv2.COLOR_BGR2GRAY)
         im = Image.fromarray(imageToShow)
         img = ImageTk.PhotoImage(image=im)
 
@@ -35,18 +36,65 @@ def select_image():
 
 
 def get_current_value():
-    return '{: .2f}'.format(current_value.get())
+    return current_value.get()
+
+# We define the functions to generate noise images
+
+
+def noise_aditive(image, probability: float):
+    copy = image.copy()
+    width, height, _ = copy.shape
+
+    for x in range(width):
+        for y in range(height):
+            if random.random() < probability:
+                copy[x, y] = 255
+
+    return copy
+
+
+def noise_sustractive(image, probability: float):
+    copy = image.copy()
+    width, height, _ = copy.shape
+
+    for x in range(width):
+        for y in range(height):
+            if random.random() < probability:
+                copy[x, y] = 0
+
+    return copy
+
+
+def noise_mixed(image, probability: float):
+    copy = image.copy()
+    width, height, _ = copy.shape
+
+    for x in range(width):
+        for y in range(height):
+            if random.random() < 0.5:
+                if random.random() < probability:
+                    copy[x, y] = 255
+                else:
+                    copy[x, y] = 0
+
+    return copy
 
 
 def generate_noise():
     global current_value, selected, image, imageWithNoise
 
+    print(f"Generating noise {selected.get()}: {current_value.get()}")
     if selected.get() == 0:
         messagebox.showinfo("Informacion", "Seleccione un tipo de ruido!!")
         return
+    if selected.get() == 1:
+        imageWithNoise = noise_aditive(image, current_value.get()/100)
+    elif selected.get() == 2:
+        imageWithNoise = noise_sustractive(image, current_value.get()/100)
+    elif selected.get() == 3:
+        imageWithNoise = noise_mixed(image, current_value.get()/100)
 
-    print(f"Generating noise {selected.get()}: {current_value.get()}")
-    imageToShow = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+    imageToShow = cv2.cvtColor(imageWithNoise, cv2.COLOR_BGR2GRAY)
     im = Image.fromarray(imageToShow)
     img = ImageTk.PhotoImage(image=im)
 
@@ -61,15 +109,13 @@ def save_image():
     import random
     global imageWithNoise
 
-    if imageWithNoise == None:
-        messagebox.showinfo(
-            "Informacion", "No se ha generado una imagen para guardar!!")
-        return
-
-    path_image = f"assets/image/"
+    path_image = "assets/image/"
     image_name = f"image{int(random.uniform(0, 1000000))}.png"
+    # print(f"Image name: {imageWithNoise}")
     print(f"Saving image on path: {path_image+image_name}")
-    # cv2.imwrite(path_image+image_name, imageWithNoise)
+    isSaved = cv2.imwrite(image_name, cv2.cvtColor(
+        imageWithNoise, cv2.COLOR_BGR2GRAY))
+    print(f"Saved? : {isSaved}")
     messagebox.showinfo("Informacion", "Imagen guardada como " + image_name)
 
 
@@ -134,6 +180,8 @@ slider = Scale(
     orient='horizontal',
     command=slider_changed,
     variable=current_value
+
+
 ).grid(column=0, row=7, padx=5, pady=5)
 labelNoiseValue = ttk.Label(
     tab_noise,
@@ -144,14 +192,13 @@ btnGenerateNoise = Button(
     tab_noise,
     text="Generar ruido",
     command=generate_noise).grid(column=0, row=9, padx=5, pady=5)
-if imageWithNoise != None:
-    saveImage = Button(
-        tab_noise,
-        text="Guardar imagen",
-        command=save_image).grid(column=0, row=10, padx=5, pady=5)
+saveImage = Button(
+    tab_noise,
+    text="Guardar imagen",
+    command=save_image).grid(column=0, row=10, padx=5, pady=5)
 
 
-# Tab memory
+# Add content to tab memory
 label2 = Label(
     tab_memory, text="Esta etiqueta va en el tab de la memoria asociativa")
 label2.place(x=20, y=20)
