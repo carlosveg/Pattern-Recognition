@@ -42,57 +42,55 @@ def get_current_value():
 
 
 def noise_aditive(image, probability: float):
-    copy = image.copy()
-    width, height, _ = copy.shape
+    width, height, _ = image.shape
 
     for x in range(width):
         for y in range(height):
             if random.random() < probability:
-                copy[x, y] = 255
+                image[x, y] = 255
 
-    return copy
+    return image
 
 
 def noise_sustractive(image, probability: float):
-    copy = image.copy()
-    width, height, _ = copy.shape
+    width, height, _ = image.shape
 
     for x in range(width):
         for y in range(height):
             if random.random() < probability:
-                copy[x, y] = 0
+                image[x, y] = 0
 
-    return copy
+    return image
 
 
 def noise_mixed(image, probability: float):
-    copy = image.copy()
-    width, height, _ = copy.shape
+    width, height, _ = image.shape
 
     for x in range(width):
         for y in range(height):
             if random.random() < 0.5:
                 if random.random() < probability:
-                    copy[x, y] = 255
+                    image[x, y] = 255
                 else:
-                    copy[x, y] = 0
+                    image[x, y] = 0
 
-    return copy
+    return image
 
 
 def generate_noise():
     global current_value, selected, image, imageWithNoise
+    copy = image.copy()
 
     print(f"Generating noise {selected.get()}: {current_value.get()}")
     if selected.get() == 0:
         messagebox.showinfo("Informacion", "Seleccione un tipo de ruido!!")
         return
     if selected.get() == 1:
-        imageWithNoise = noise_aditive(image, current_value.get()/100)
+        imageWithNoise = noise_aditive(copy, current_value.get()/100)
     elif selected.get() == 2:
-        imageWithNoise = noise_sustractive(image, current_value.get()/100)
+        imageWithNoise = noise_sustractive(copy, current_value.get()/100)
     elif selected.get() == 3:
-        imageWithNoise = noise_mixed(image, current_value.get()/100)
+        imageWithNoise = noise_mixed(copy, current_value.get()/100)
 
     imageToShow = cv2.cvtColor(imageWithNoise, cv2.COLOR_BGR2GRAY)
     im = Image.fromarray(imageToShow)
@@ -124,6 +122,7 @@ imageWithNoise = None
 # Configuration of tkinter window
 root = Tk()
 root.title("Pattern Recognition Projects")
+root.resizable(False, False)
 
 # Create a notebook for use tabs
 notebook = ttk.Notebook()
