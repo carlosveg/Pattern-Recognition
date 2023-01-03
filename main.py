@@ -1,5 +1,5 @@
-from classifiers.classifiers import knn, mahalanobis, perceptron
+from classifiers.classifiers import knn, maam, mahalanobis, perceptron
 
 
 if __name__ == '__main__':
-    knn()
+    maam()

@@ -5,12 +5,11 @@ from tkinter import ttk, filedialog, messagebox
 import cv2
 import imutils
 from PIL import Image, ImageTk
-# from ruido import ruidoad
 
 
 def select_image():
     path_image = filedialog.askopenfilename(
-        filetypes=[("image", ".jpg"), ("image", ".png"), ("image", ".jpeg")])
+        filetypes=[("image", ".jpg"), ("image", ".png"), ("image", ".jpeg"), ("image", ".bmp")])
 
     if len(path_image) > 0:
         global image
@@ -114,7 +113,11 @@ def save_image():
     isSaved = cv2.imwrite(image_name, cv2.cvtColor(
         imageWithNoise, cv2.COLOR_BGR2GRAY))
     print(f"Saved? : {isSaved}")
-    messagebox.showinfo("Informacion", "Imagen guardada como " + image_name)
+    if isSaved:
+        messagebox.showinfo(
+            "Informacion", "Imagen guardada como " + image_name)
+    else:
+        messagebox.showinfo("Informacion", "ERROR al guardar la imagen")
 
 
 image = None

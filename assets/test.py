@@ -66,12 +66,15 @@ clases = [c1, c2, c3]
 
 
 def getFiles():
-    contentPath = os.listdir(os.getcwd())
+    contentPath = os.listdir(os.getcwd()+"/../")
+    print(os.getcwd())
     print(contentPath)
     #filesTXT = [file if ".txt" in file else "" for file in contentPath]
     filesTXT = [file for file in contentPath if ".txt" in file]
     print(filesTXT)
 
 
-for i in range(10):
-    print(random.uniform(0, 1))
+# for i in range(10):
+#     print(random.uniform(0, 1))
+
+getFiles()

@@ -1,14 +1,25 @@
+import os
 from typing import List
 import pandas as pd
 import cv2
 import csv
 
 
-def getImages(paths: List) -> List:
+def getImagesFromPath(path: str) -> List[str]:
+    contentPath = os.listdir(
+        f"{os.getcwd()}/{path}")
+    print(contentPath)
+    contentPath = list(
+        map(lambda item: f"{path}{item}", contentPath))
+
+    return contentPath
+
+
+def getImages(paths: List, typeOpen: int = 1) -> List:
     images = []
 
     for path in paths:
-        images.append(cv2.imread(path))
+        images.append(cv2.imread(path, typeOpen))
 
     return images
 
@@ -35,10 +46,10 @@ def writeInCsv(filename: str, headers: List[str], data: List) -> None:
         writer.writerows(data)
 
 
-def adapterTrainingData(filename: str) -> List[List]:
+def adapterTrainingData(filename: str, X_train: any, y_train: any) -> List[List]:
     fullData = pd.read_csv(filename)
-    patterns = fullData[['b', 'g', 'r']]
-    classes = fullData["clase"]
+    patterns = fullData[X_train]
+    classes = fullData[y_train]
 
     return patterns, classes
 
@@ -50,6 +61,6 @@ def doAll(filename: str) -> List[List]:
         images, cv2.imread("assets/image/3-regiones.png"))
 
     writeInCsv(filename, ['b', 'g', 'r', "clase"], training_data)
-    data_adapted = adapterTrainingData(filename)
+    data_adapted = adapterTrainingData(filename, ['b', 'g', 'r'], "clase")
 
     return data_adapted
