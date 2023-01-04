@@ -71,7 +71,8 @@ def maam() -> None:
     imageTest = np.array(imageTest).flatten()
     imageTest = imageTest.reshape(50, 50)
     imageToPredict = imageTest.reshape(-1, 2500)
-    image = cv2.imread("assets/image/cinco4.png", 0)
+
+    image = cv2.imread("assets/image/cinco1.png", 0)
     image = cv2.resize(image, (50, 50))
     image = image / 255.0
     image = np.array(image).flatten()
