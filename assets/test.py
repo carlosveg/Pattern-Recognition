@@ -60,7 +60,7 @@ patron2 = [4, 58, 44]
 patron3 = [173, 212, 237]
 c1_2 = np.array(c1_2)
 clases = [c1, c2, c3]
-#mahalanobis(patron3, clases)
+# mahalanobis(patron3, clases)
 
 # init(clases)
 
@@ -69,7 +69,7 @@ def getFiles():
     contentPath = os.listdir(os.getcwd()+"/../")
     print(os.getcwd())
     print(contentPath)
-    #filesTXT = [file if ".txt" in file else "" for file in contentPath]
+    # filesTXT = [file if ".txt" in file else "" for file in contentPath]
     filesTXT = [file for file in contentPath if ".txt" in file]
     print(filesTXT)
 
@@ -77,4 +77,61 @@ def getFiles():
 # for i in range(10):
 #     print(random.uniform(0, 1))
 
-getFiles()
+x = [[1, 0, 1, 0, 1], [1, 1, 0, 0, 1], [1, 0, 1, 1, 0]]
+y = [[1, 0, 0], [0, 1, 0], [0, 0, 1]]
+
+
+def firstPhaseOfTraining(x: list, y: list):
+    matrix = []
+
+    for list_x, list_y in zip(x, y):
+        matrix_aux = []
+        for i in list_y:
+            aux = []
+            for j in list_x:
+                aux.append(i - j)
+            matrix_aux.append(aux)
+        matrix.append(matrix_aux)
+
+    return matrix
+
+
+matrix = firstPhaseOfTraining(x, y)
+matrix = np.array(matrix)
+print(f"Matrices: \n{matrix}")
+
+
+def getLearningMatrix(arrays: np.array):
+    matrix = []
+
+    for sublistas in zip(*arrays):
+        # print(sublistas)
+        for fila in zip(*sublistas):
+            # print(filas)
+            matrix.append(
+                max(fila))
+
+    return np.array(matrix)
+
+
+final = getLearningMatrix(matrix)
+# print(final)
+final = final.reshape(3, 5)
+print(f"Memoria: \n{final}")
+
+
+def classify(matrix, pattern):
+    result = []
+
+    for fila in matrix:
+        aux = []
+        for pos in range(len(pattern)):
+            aux.append(fila[pos]+pattern[pos])
+        result.append(min(aux))
+
+    return result
+
+
+value = classify(final, [1, 0, 1, 0, 1])
+
+print(f"Resultado: \n{value}")

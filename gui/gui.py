@@ -15,7 +15,7 @@ def select_image():
         global image
 
         image = cv2.imread(path_image)
-        image = imutils.resize(image, height=380)
+        image = imutils.resize(image, height=50)
 
         imageToShow = imutils.resize(image, width=180)
         imageToShow = cv2.cvtColor(imageToShow, cv2.COLOR_BGR2GRAY)
@@ -68,10 +68,11 @@ def noise_mixed(image, probability: float):
     for x in range(width):
         for y in range(height):
             if random.random() < 0.5:
-                if random.random() < probability:
-                    image[x, y] = 255
-                else:
+                rnd = random.random()
+                if rnd < probability:
                     image[x, y] = 0
+                else:
+                    image[x, y] = 255
 
     return image
 
@@ -81,18 +82,18 @@ def generate_noise():
     copy = image.copy()
 
     print(f"Generating noise {selected.get()}: {current_value.get()}")
-    if selected.get() == 0:
+    if selected.get() == "":
         messagebox.showinfo("Informacion", "Seleccione un tipo de ruido!!")
         return
-    if selected.get() == 1:
+    if selected.get() == "ad":
         imageWithNoise = noise_aditive(copy, current_value.get()/100)
-    elif selected.get() == 2:
+    elif selected.get() == "sus":
         imageWithNoise = noise_sustractive(copy, current_value.get()/100)
-    elif selected.get() == 3:
+    elif selected.get() == "mix":
         imageWithNoise = noise_mixed(copy, current_value.get()/100)
 
-    imageToShow = cv2.cvtColor(imageWithNoise, cv2.COLOR_BGR2GRAY)
-    im = Image.fromarray(imageToShow)
+    # imageToShow = cv2.cvtColor(imageWithNoise, cv2.COLOR_BGR2GRAY)
+    im = Image.fromarray(imageWithNoise)
     img = ImageTk.PhotoImage(image=im)
 
     labelOutputImage.configure(image=img)
@@ -104,12 +105,13 @@ def generate_noise():
 
 def save_image():
     import random
-    global imageWithNoise
+    global imageWithNoise, selected, current_value
 
     path_image = "assets/image/"
-    image_name = f"image{int(random.uniform(0, 1000000))}.png"
+    image_name = f"image{selected.get()}{current_value.get()}.bmp"
     # print(f"Image name: {imageWithNoise}")
     print(f"Saving image on path: {path_image+image_name}")
+    imageWithNoise = imutils.resize(imageWithNoise, height=50)
     isSaved = cv2.imwrite(image_name, cv2.cvtColor(
         imageWithNoise, cv2.COLOR_BGR2GRAY))
     print(f"Saved? : {isSaved}")
@@ -156,24 +158,24 @@ labelOutputImage = Label(tab_noise)
 labelOutputImage.grid(column=1, row=1, rowspan=10)
 labelParameters = Label(tab_noise, text="Parametros para generar ruido")
 labelParameters.grid(column=0, row=3, padx=5, pady=5)
-selected = IntVar()
+selected = StringVar()
 ruidoAditivo = Radiobutton(
     tab_noise,
     text="Ruido Aditivo",
     width=25,
-    value=1,
+    value="ad",
     variable=selected).grid(column=0, row=4, padx=5, pady=5)
 ruidoSustractivo = Radiobutton(
     tab_noise,
     text="Ruido Sustractivo",
     width=25,
-    value=2,
+    value="sus",
     variable=selected).grid(column=0, row=5, padx=5, pady=5)
 ruidoMixto = Radiobutton(
     tab_noise,
     text="Ruido Mixto",
     width=25,
-    value=3,
+    value="mix",
     variable=selected).grid(column=0, row=6, padx=5, pady=5)
 slider = Scale(
     tab_noise,

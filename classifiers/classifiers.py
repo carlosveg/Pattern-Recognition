@@ -1,5 +1,3 @@
-import csv
-from typing import List
 import cv2
 import numpy as np
 from assets import utils
@@ -9,6 +7,7 @@ from classifiers.perceptron import Perceptron
 from classifiers.mahalanobis import Clasificador
 from assets.imagen import Imagen
 from assets.clases import c1, c2, c3, correctos
+from matplotlib import pyplot as plt
 
 
 def mahalanobis():
@@ -44,38 +43,46 @@ def perceptron() -> None:
 
 
 def maam() -> None:
-    maam = MAAM()
     paths = utils.getImagesFromPath(
         "assets/image/Digitos-Imagen-pequena/")
-    # print(f"Training data: {paths}")
     images = utils.getImages(paths, 0)
     classes = ["uno", "tres", "siete", "seis", "ocho",
                "nueve", "dos", "cuatro", "cinco", "cero"]
+
     X_train = []
-    y_train = []
-
-    for i in range(10):
-        img = cv2.imread(paths[i], 0)
-        # img = cv2.resize(img, (28, 28))
-        img = img / 255.0  # Normalizamos la escala de grises a valores entre 0 y 1
-        img = np.array(img).flatten()  # Aplanamos la imagen en un array 1D
+    for image in images:
+        # _, img = cv2.threshold(image, 160, 255, cv2.THRESH_BINARY)
+        img = np.array(image).flatten()
+        # img = img / 255
         X_train.append(img)
-        y_train.append(classes[i])
 
-    X_train = np.array(X_train, dtype='float32')
-    y_train = np.array(y_train)
+    """
+        Este bloque de código es para mostrar el ejemplo del
+        porque se aplicó la umbralización a las imágenes
+    """
+    # _, ax = plt.subplots(2)
+    # ax[0].imshow(images[0], cmap="gray")
+    # ax[0].set_title("Imagen original")
+    # ax[0].axis("off")
+    # _, image = cv2.threshold(images[0], 160, 255, cv2.THRESH_BINARY)
+    # ax[1].imshow(image, cmap="gray")
+    # ax[1].set_title("Imagen umbralizada")
+    # plt.show()
+    # print(np.shape(X_train[0]))
+    # print(X_train[0])
 
-    maam.training(X_train, y_train)
-    imageTest = cv2.resize(images[2], (50, 50))
-    imageTest = imageTest / 255.0
-    imageTest = np.array(imageTest).flatten()
-    imageTest = imageTest.reshape(50, 50)
-    imageToPredict = imageTest.reshape(-1, 2500)
+    maam = MAAM(X_train, X_train)
+    matrix = maam.getLearningMatrix()
+    matrix = matrix.reshape(2500, 2500)
 
-    image = cv2.imread("assets/image/cinco1.png", 0)
-    image = cv2.resize(image, (50, 50))
-    image = image / 255.0
-    image = np.array(image).flatten()
-    image = image.reshape(50, 50)
-    imageToPredict = image.reshape(-1, 2500)
-    maam.classify(imageToPredict)
+    # este código es para probar con una imagen con ruido
+    image = cv2.imread("assets/image/Ruido/ruido_sus/imagesus50.bmp", 0)
+    # _, img = cv2.threshold(image, 160, 255, cv2.THRESH_BINARY)
+    img = np.array(image).flatten()
+    # img = img / 255
+
+    result = maam.classify(matrix, img)
+    result = result.reshape(50, 50)
+    cv2.imshow("Resultado", result)
+    cv2.waitKey()
+    cv2.destroyAllWindows()

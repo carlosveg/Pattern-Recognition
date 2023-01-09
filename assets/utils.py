@@ -8,7 +8,7 @@ import csv
 def getImagesFromPath(path: str) -> List[str]:
     contentPath = os.listdir(
         f"{os.getcwd()}/{path}")
-    print(contentPath)
+    # print(contentPath)
     contentPath = list(
         map(lambda item: f"{path}{item}", contentPath))
 
