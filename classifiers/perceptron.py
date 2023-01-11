@@ -1,3 +1,22 @@
+"""
+    Clasificador KNN con distancia mímina
+
+    Equipo 2
+        Documentación e Investigación:
+            Escobedo Dominguez Nadia Gabriela
+            Medina Posadas Enrique
+            Sevillano Mendoza Victor Manuel
+        Programación:
+            Lemus Ruiz Mariana Elizabeth
+            Vega Gloria Carlos Raymundo
+"""
+
+__author__ = ["Vega Gloria Carlos Raymundo"]
+__copyright__ = "Copyright 2023, Carlos Vega"
+__credits__ = ["Carlos Vega"]
+__version__ = "1.0.1"
+__maintainer__ = "Carlos Vega"
+
 from typing import List
 from sklearn.neural_network import MLPClassifier
 from sklearn.metrics import confusion_matrix, precision_score

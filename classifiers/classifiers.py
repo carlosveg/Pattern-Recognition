@@ -76,7 +76,7 @@ def maam() -> None:
     matrix = matrix.reshape(2500, 2500)
 
     # este código es para probar con una imagen con ruido
-    image = cv2.imread("assets/image/Ruido/ruido_sus/imagesus50.bmp", 0)
+    image = cv2.imread("assets/image/Ruido/ruido_ad/imagead99.bmp", 0)
     # _, img = cv2.threshold(image, 160, 255, cv2.THRESH_BINARY)
     img = np.array(image).flatten()
     # img = img / 255

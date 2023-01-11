@@ -1,3 +1,19 @@
+"""
+    Módulo gui
+
+    Equipo 2
+        Documentación e Investigación:
+            Escobedo Dominguez Nadia Gabriela
+            Medina Posadas Enrique
+            Sevillano Mendoza Victor Manuel
+        Programación:
+            Lemus Ruiz Mariana Elizabeth
+            Vega Gloria Carlos Raymundo
+
+    Descripción: Este archivo contiene el código para crear una UI que sirve
+    para generar ruido en la imagen que seleccione el usuario
+"""
+
 import random
 from tkinter import *
 from tkinter.ttk import *
@@ -36,6 +52,7 @@ def select_image():
 
 def get_current_value():
     return current_value.get()
+
 
 # We define the functions to generate noise images
 
